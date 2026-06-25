@@ -1,17 +1,40 @@
 # Conclusion générale
 
-Dans le cadre de ce projet MSPR, nous avons conçu, déployé et sécurisé une infrastructure de gestion de base de données répondant aux exigences de disponibilité, de sécurité et de continuité d'activité définies dans le cahier des charges.
+Dans le cadre de ce projet MSPR, nous avons conçu, déployé, sécurisé et documenté une infrastructure de base de données complète répondant aux exigences de disponibilité, de sécurité, de supervision et de continuité d'activité définies dans le cahier des charges de NordTransit Logistics.
 
-La solution mise en œuvre repose sur PostgreSQL et s'appuie sur une architecture haute disponibilité composée d'un serveur principal et d'un serveur secondaire répliqué. Cette architecture permet d'assurer la continuité du service tout en réduisant les risques de perte de données.
+La solution mise en œuvre repose sur PostgreSQL et s'appuie sur une architecture distribuée composée de cinq serveurs spécialisés :
 
-Afin de garantir la protection des informations, un système de sauvegarde automatisée a été déployé et validé par des tests de restauration. Ces tests ont permis de démontrer la capacité de l'infrastructure à restaurer les données en cas d'incident.
+* WMS-DB-01 : serveur PostgreSQL principal ;
+* WMS-DB-02 : serveur PostgreSQL secondaire assurant la réplication ;
+* WMS-PGADMIN : serveur dédié à l'administration de la base de données ;
+* WMS-BACKUP : serveur dédié au stockage externalisé des sauvegardes ;
+* WMS-SUPER01 : serveur de supervision Zabbix.
 
-La supervision de l'ensemble de l'environnement est assurée par Zabbix, qui permet le suivi en temps réel de la disponibilité des serveurs, des performances système et des ressources critiques. Cette supervision contribue à l'amélioration de la réactivité face aux incidents et facilite l'exploitation quotidienne de l'infrastructure.
+Cette organisation permet de séparer les rôles critiques de l'infrastructure afin d'améliorer la sécurité, la disponibilité des services et la résilience globale du système.
 
-Sur le plan de la sécurité, un modèle de gestion des accès basé sur les rôles (RBAC) a été mis en œuvre. Chaque utilisateur dispose uniquement des permissions nécessaires à ses fonctions, conformément au principe du moindre privilège.
+Afin de garantir la continuité d'activité, une réplication PostgreSQL de type Primary / Replica a été mise en œuvre et validée par des tests de synchronisation. Cette réplication permet d'assurer la disponibilité des données et facilite les opérations de reprise en cas d'incident affectant le serveur principal.
 
-Au-delà des aspects techniques, ce projet nous a permis de développer des compétences en administration de bases de données, en supervision d'infrastructure, en automatisation des tâches d'exploitation, en sécurisation des accès ainsi qu'en gestion de projet informatique.
+La protection des données repose sur une stratégie de sauvegarde automatisée associée à un stockage externalisé sur le serveur WMS-BACKUP. Des procédures de restauration ont été testées avec succès afin de vérifier la capacité de récupération des données en cas de suppression accidentelle, de corruption ou de défaillance matérielle.
 
-Les objectifs fixés dans le cahier des charges ont été atteints grâce à la mise en place d'une solution robuste, évolutive et conforme aux bonnes pratiques professionnelles. L'infrastructure réalisée constitue une base solide pouvant être enrichie à l'avenir par l'ajout de mécanismes de haute disponibilité avancés, de supervision applicative ou encore d'automatisation supplémentaire des procédures d'exploitation.
+La supervision de l'ensemble de l'infrastructure est assurée par Zabbix. Les principaux indicateurs surveillés sont la disponibilité des serveurs, l'utilisation du processeur, la mémoire, l'espace disque, l'état de la réplication PostgreSQL ainsi que le suivi des sauvegardes. Cette supervision permet une détection rapide des incidents et contribue à améliorer la qualité de service.
 
-Ce projet a ainsi permis de mettre en pratique les compétences attendues d'un administrateur systèmes, réseaux et bases de données dans un contexte professionnel réaliste.
+Sur le plan de la sécurité, un modèle de contrôle d'accès basé sur les rôles (RBAC) a été déployé conformément au principe du moindre privilège. Plusieurs profils utilisateurs ont été définis afin de limiter les permissions accordées aux seules opérations nécessaires à chaque fonction.
+
+Le projet a également permis la réalisation de nombreux livrables professionnels comprenant notamment :
+
+* l'architecture technique ;
+* le MCD et le MLD ;
+* le guide de supervision ;
+* le guide d'administration et d'exploitation ;
+* le RunBook d'exploitation ;
+* le PCA/PRA ;
+* l'analyse des logs ;
+* la démarche d'optimisation de la base de données ;
+* la gestion de projet et l'analyse des risques ;
+* la note de direction.
+
+Au-delà des aspects techniques, cette MSPR nous a permis de développer des compétences en administration PostgreSQL, en haute disponibilité, en sauvegarde et restauration, en supervision d'infrastructure, en sécurisation des accès, en gestion de projet ainsi qu'en documentation technique.
+
+L'ensemble des objectifs définis dans le cahier des charges a été atteint. L'infrastructure réalisée constitue une solution robuste, sécurisée, supervisée et évolutive, conforme aux bonnes pratiques professionnelles et capable de répondre aux besoins opérationnels de NordTransit Logistics.
+
+Cette expérience nous a permis de mettre en pratique les compétences attendues d'un Administrateur Systèmes, Réseaux et Bases de Données dans un contexte proche des environnements de production rencontrés en entreprise.

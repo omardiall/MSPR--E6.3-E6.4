@@ -4,7 +4,7 @@
 
 Dans le cadre de la MSPR TPRE623 du cursus Administrateur Systèmes, Réseaux et Bases de Données (ASRBD), notre équipe a été missionnée par l’entreprise fictive **NordTransit Logistics (NTL)** afin de concevoir, sécuriser, superviser et exploiter une nouvelle infrastructure de base de données destinée à son système de gestion d’entrepôt (WMS).
 
-L'objectif principal du projet était de remplacer l'infrastructure existante par une solution moderne répondant aux exigences de :
+L'objectif principal du projet était de mettre en place une infrastructure moderne répondant aux exigences de :
 
 * Haute disponibilité ;
 * Continuité d’activité ;
@@ -18,70 +18,131 @@ Pour répondre à ces besoins, nous avons choisi **PostgreSQL** comme système d
 
 * Un serveur PostgreSQL Principal (Primary) ;
 * Un serveur PostgreSQL Secondaire (Replica) ;
-* Une réplication PostgreSQL en temps réel ;
-* Des sauvegardes automatisées ;
-* Une supervision centralisée via Zabbix ;
+* Un serveur dédié à l’administration PostgreSQL ;
+* Un serveur dédié aux sauvegardes externalisées ;
+* Une plateforme de supervision centralisée ;
 * Une gestion des accès basée sur les rôles (RBAC) ;
 * Un Plan de Continuité d’Activité (PCA) ;
 * Un Plan de Reprise d’Activité (PRA).
 
 ---
 
-Architecture mise en œuvre
+# Architecture mise en œuvre
 
 L’infrastructure est composée des éléments suivants :
 
-WMS-DB-01 : PostgreSQL Primary
-WMS-DB-02 : PostgreSQL Replica
-WMS-PGADMIN : Serveur dédié à l’administration PostgreSQL
-WMS-BACKUP : Serveur dédié au stockage des sauvegardes
-WMS-SUPER01 : Serveur de supervision Zabbix
+* WMS-DB-01 : PostgreSQL Primary
+* WMS-DB-02 : PostgreSQL Replica
+* WMS-PGADMIN : Administration PostgreSQL
+* WMS-BACKUP : Sauvegardes externalisées
+* WMS-SUPER01 : Supervision Zabbix
 
 Cette architecture repose sur une séparation des rôles afin d'améliorer la sécurité, la disponibilité et la résilience de la plateforme.
 
-Les principaux mécanismes mis en place sont :
+## Schéma simplifié
 
-Réplication PostgreSQL ;
-Sauvegardes automatiques ;
-Sauvegardes externalisées ;
-Tests de restauration ;
-Supervision CPU, RAM, Disque et disponibilité ;
-Gestion des droits par rôles ;
-Analyse des journaux système ;
-Administration PostgreSQL dédiée.
-Fonctionnalités réalisées
-Base de données
-Modélisation MCD et MLD
-Création du schéma relationnel
-Intégrité référentielle
-Contraintes métier
-Optimisation des accès
-Gestion avancée des rôles utilisateurs
-Haute disponibilité
-Architecture Primary / Replica
-Réplication PostgreSQL
-Validation de la synchronisation
-Procédure de bascule vers le Replica
-Sauvegarde et restauration
-Sauvegardes automatisées
-Rotation des sauvegardes
-Journalisation
-Stockage externalisé sur WMS-BACKUP
-Tests de restauration validés
-Sécurité
-RBAC (Role Based Access Control)
-Principe du moindre privilège
-Comptes dédiés à l’administration, la supervision, la réplication et la sauvegarde
-Séparation entre production et administration
-Supervision
-Dashboard Zabbix
-Disponibilité des serveurs
-CPU
-RAM
-Espace disque
-État de la réplication
-Suivi des sauvegardes
-Alertes et supervision continue
+```text
+WMS-SUPER01 (Zabbix)
+        │
+        ├───────────────┐
+        │               │
+        ▼               ▼
+
+WMS-DB-01 ─────► WMS-DB-02
+(Primary)        (Replica)
+
+     │
+     │ Sauvegardes
+     ▼
+
+WMS-BACKUP
+
+WMS-PGADMIN
+(Administration PostgreSQL)
+```
+
+---
+
+# Technologies utilisées
+
+## Base de données
+
+* PostgreSQL
+
+## Conteneurisation
+
+* Docker
+* Docker Compose
+
+## Administration
+
+* pgAdmin
+
+## Supervision
+
+* Zabbix
+* Zabbix Agent
+
+## Sauvegarde
+
+* pg_dump
+* Cron
+
+---
+
+# Fonctionnalités réalisées
+
+## Base de données
+
+* Modélisation MCD et MLD
+* Création du schéma relationnel
+* Intégrité référentielle
+* Contraintes métier
+* Optimisation des accès
+* Gestion avancée des rôles utilisateurs
+
+---
+
+## Haute disponibilité
+
+* Architecture Primary / Replica
+* Réplication PostgreSQL
+* Validation de la synchronisation
+* Procédure de bascule vers le Replica
+
+---
+
+## Sauvegarde et restauration
+
+* Sauvegardes automatisées
+* Rotation des sauvegardes
+* Journalisation
+* Sauvegardes externalisées sur WMS-BACKUP
+* Tests de restauration validés
+
+---
+
+## Sécurité
+
+* RBAC (Role Based Access Control)
+* Principe du moindre privilège
+* Comptes dédiés à l’administration
+* Comptes dédiés à la réplication
+* Comptes dédiés aux sauvegardes
+* Séparation entre production et administration
+
+---
+
+## Supervision
+
+* Dashboard Zabbix
+* Disponibilité des serveurs
+* CPU
+* RAM
+* Espace disque
+* État de la réplication
+* Suivi des sauvegardes
+* Alertes et supervision continue
 
 ---
 
@@ -89,10 +150,14 @@ Alertes et supervision continue
 
 ## Omar Bachir Diallo
 
-* Chef de projet
+### Chef de projet et Administrateur Base de Données
+
+* Pilotage du projet
+* Coordination de l'équipe
 * Déploiement PostgreSQL Primary
-* Mise en place de la réplication PostgreSQL
+* Mise en œuvre de la réplication PostgreSQL
 * Configuration des sauvegardes
+* Mise en place du serveur WMS-BACKUP
 * Tests de restauration
 * Documentation technique
 * Validation de l’infrastructure
@@ -101,34 +166,64 @@ Alertes et supervision continue
 
 ## Filda
 
-* Modélisation de la base de données
-* Élaboration du MCD
-* Élaboration du MLD
-* Définition des contraintes métier
-* Vérification de l’intégrité des données
+### Conception et modélisation de la base de données
+
+* Analyse du besoin métier
+* Réalisation du MCD
+* Réalisation du MLD
+* Création du schéma relationnel
+* Mise en place des contraintes métier
+* Validation de l'intégrité des données
 * Participation à la documentation
 
 ---
 
 ## Amine
 
-* Mise en œuvre de la supervision Zabbix
+### Supervision et exploitation
+
+* Déploiement du serveur WMS-SUPER01
+* Installation de Zabbix
 * Configuration des agents
 * Création du dashboard
-* Définition des indicateurs de supervision
-* Analyse des journaux
-* Participation aux tests de validation
+* Mise en place des alertes
+* Surveillance CPU, RAM et stockage
+* Supervision des sauvegardes
+* Analyse des logs
+* Validation des indicateurs de supervision
 
 ---
 
 ## Madgyd
 
-* Sécurisation de l’infrastructure
+### Sécurité et continuité d’activité
+
 * Mise en œuvre du RBAC
-* Gestion des rôles et permissions
-* Contribution au PCA/PRA
+* Création des rôles PostgreSQL
+* Gestion des permissions
+* Déploiement du serveur WMS-PGADMIN
+* Participation au PCA/PRA
 * Analyse des risques
+* Rédaction des procédures d'exploitation
 * Participation aux livrables de gestion de projet
+
+---
+
+# Livrables réalisés
+
+Les livrables produits dans le cadre du projet sont :
+
+* Architecture technique
+* MCD et MLD
+* Démarche d’optimisation PostgreSQL
+* Guide de supervision
+* Guide d’administration et d’exploitation
+* RunBook d’exploitation
+* Analyse de logs
+* PCA / PRA
+* Gestion de projet et analyse des risques
+* Note de direction
+* Documentation technique
 
 ---
 
@@ -151,17 +246,15 @@ Ce projet nous a permis de mettre en œuvre les compétences suivantes :
 
 # Conclusion
 
-
-
 Le projet a permis de concevoir une infrastructure de base de données robuste, sécurisée, supervisée et résiliente répondant aux exigences de NordTransit Logistics.
 
 L'architecture finale repose sur cinq serveurs spécialisés :
 
-WMS-DB-01 : Production PostgreSQL
-WMS-DB-02 : Réplication et continuité d'activité
-WMS-PGADMIN : Administration PostgreSQL
-WMS-BACKUP : Sauvegardes externalisées
-WMS-SUPER01 : Supervision Zabbix
+* WMS-DB-01 : Production PostgreSQL
+* WMS-DB-02 : Réplication et continuité d'activité
+* WMS-PGADMIN : Administration PostgreSQL
+* WMS-BACKUP : Sauvegardes externalisées
+* WMS-SUPER01 : Supervision Zabbix
 
 Les mécanismes de haute disponibilité, de réplication, de sauvegarde externalisée, de supervision et de sécurisation des accès garantissent la continuité du service tout en assurant la protection des données critiques de l’entreprise.
 
