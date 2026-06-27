@@ -223,3 +223,229 @@ La gestion du projet a permis d'assurer la bonne coordination des différentes t
 Grâce à une répartition claire des responsabilités, à une analyse rigoureuse des risques et à la mise en œuvre de solutions adaptées, l'équipe a pu livrer une infrastructure robuste, sécurisée et conforme aux exigences du cahier des charges.
 
 Le projet constitue une mise en situation professionnelle complète couvrant les principaux domaines de compétence d'un Administrateur Systèmes, Réseaux et Bases de Données.
+
+# Project Management and Risk Analysis
+
+## 1. Project Overview
+
+The MSPR TPRE623 project consisted of designing, deploying, securing, monitoring, and documenting a database infrastructure intended for the Warehouse Management System (WMS) of the fictional company NordTransit Logistics (NTL).
+
+The main objective was to implement a reliable infrastructure capable of providing:
+
+* logistics data management;
+* high service availability;
+* data protection;
+* infrastructure monitoring;
+* business continuity;
+* secure access control.
+
+The final architecture is based on five specialized servers:
+
+* WMS-DB-01: PostgreSQL Primary;
+* WMS-DB-02: PostgreSQL Replica;
+* WMS-PGADMIN: PostgreSQL administration server;
+* WMS-BACKUP: Backup storage server;
+* WMS-SUPER01: Zabbix monitoring server.
+
+---
+
+# 2. Project Organization
+
+The project was carried out using a collaborative approach based on a clear distribution of responsibilities among team members.
+
+The main activities performed included:
+
+* architecture design;
+* database modeling;
+* PostgreSQL deployment;
+* replication implementation;
+* backup automation;
+* backup server deployment;
+* pgAdmin deployment;
+* monitoring implementation;
+* access security configuration;
+* technical documentation;
+* validation of restoration procedures.
+
+---
+
+# 3. Roles and Responsibilities
+
+## Omar Bachir Diallo
+
+### Project Manager and Database Administrator
+
+Responsibilities:
+
+* project leadership;
+* team coordination;
+* PostgreSQL deployment;
+* replication implementation;
+* backup configuration;
+* WMS-BACKUP server deployment;
+* restoration validation;
+* technical documentation;
+* final infrastructure validation.
+
+---
+
+## Filda
+
+### Database Design and Modeling
+
+Responsibilities:
+
+* requirements analysis;
+* database model design;
+* creation of the Conceptual Data Model (CDM);
+* creation of the Logical Data Model (LDM);
+* business rule definition;
+* data consistency validation;
+* contribution to technical documentation.
+
+---
+
+## Amine
+
+### Monitoring and Operations
+
+Responsibilities:
+
+* Zabbix installation;
+* agent configuration;
+* dashboard creation;
+* monitoring KPI definition;
+* CPU, RAM, and storage monitoring;
+* backup monitoring;
+* log analysis;
+* monitoring validation.
+
+---
+
+## Madgyd
+
+### Security and Business Continuity
+
+Responsibilities:
+
+* RBAC implementation;
+* PostgreSQL role creation;
+* permission management;
+* deployment of the WMS-PGADMIN server;
+* contribution to the BCP/DRP strategy;
+* risk analysis;
+* operational procedures;
+* participation in project management deliverables.
+
+---
+
+# 4. Major Project Milestones
+
+| Step | Description                  |
+| ---- | ---------------------------- |
+| 1    | Requirements analysis        |
+| 2    | Database design              |
+| 3    | CDM and LDM creation         |
+| 4    | PostgreSQL deployment        |
+| 5    | Replication implementation   |
+| 6    | Backup configuration         |
+| 7    | WMS-BACKUP deployment        |
+| 8    | pgAdmin deployment           |
+| 9    | Zabbix implementation        |
+| 10   | RBAC security implementation |
+| 11   | Restoration testing          |
+| 12   | Deliverable validation       |
+| 13   | Presentation preparation     |
+
+---
+
+# 5. Risk Analysis
+
+Risk identification is a critical step in ensuring system availability and business continuity.
+
+| Risk                   | Probability | Impact    | Mitigation Measure             |
+| ---------------------- | ----------- | --------- | ------------------------------ |
+| Primary server failure | Medium      | High      | PostgreSQL replication         |
+| Data loss              | Low         | Very High | Automated backups + WMS-BACKUP |
+| Human error            | Medium      | Medium    | RBAC and access controls       |
+| Disk saturation        | Medium      | High      | Zabbix monitoring              |
+| Software failure       | Low         | High      | Restoration procedures         |
+| Misconfiguration       | Medium      | Medium    | Operational documentation      |
+| pgAdmin compromise     | Low         | High      | Dedicated WMS-PGADMIN server   |
+| Local backup failure   | Low         | Very High | Externalized backups           |
+
+---
+
+# 6. Challenges Encountered
+
+Several technical challenges were encountered during the project:
+
+* PostgreSQL replication configuration;
+* network access configuration;
+* Docker container deployment;
+* backup implementation;
+* Zabbix integration;
+* PostgreSQL permission management;
+* RBAC configuration;
+* restoration procedure validation.
+
+These challenges were successfully resolved through multiple phases of testing, analysis, and validation.
+
+---
+
+# 7. Implemented Solutions
+
+To meet the project requirements, the following solutions were selected:
+
+* PostgreSQL for database management;
+* Docker for service deployment;
+* PostgreSQL Replication for high availability;
+* pgAdmin for administration;
+* WMS-BACKUP for externalized backup storage;
+* Zabbix for monitoring;
+* RBAC for access control management;
+* Business Continuity Plan (BCP) and Disaster Recovery Plan (DRP).
+
+---
+
+# 8. Results Achieved
+
+The project resulted in the implementation of a complete infrastructure including:
+
+* high availability;
+* centralized monitoring;
+* externalized backups;
+* data restoration procedures;
+* secure access control;
+* dedicated administration;
+* business continuity mechanisms;
+* operational documentation.
+
+All objectives defined in the project requirements were successfully achieved.
+
+---
+
+# 9. Lessons Learned
+
+This MSPR project enabled the development of skills in the following areas:
+
+* PostgreSQL administration;
+* database replication;
+* backup and recovery;
+* infrastructure monitoring;
+* access security;
+* risk management;
+* project management;
+* technical documentation.
+
+The project also provided valuable experience in collaborative teamwork and professional best practices commonly used in enterprise environments.
+
+---
+
+# 10. Conclusion
+
+Effective project management ensured the successful coordination of all activities required to build the WMS infrastructure.
+
+Thanks to a clear distribution of responsibilities, thorough risk analysis, and the implementation of appropriate technical solutions, the team successfully delivered a robust, secure, and reliable infrastructure that fully complies with the project requirements.
+
+This project represents a comprehensive professional experience covering the key competencies expected from a Systems, Networks, and Database Administrator in a real-world enterprise environment.

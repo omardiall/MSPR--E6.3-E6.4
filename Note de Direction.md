@@ -148,3 +148,154 @@ L'architecture repose sur plusieurs serveurs spécialisés assurant respectiveme
 Les mécanismes de réplication, de sauvegarde externalisée, de supervision centralisée et de contrôle d'accès permettent de garantir un niveau de service élevé tout en limitant les risques opérationnels.
 
 Cette solution offre à l'entreprise une infrastructure robuste, évolutive et conforme aux bonnes pratiques professionnelles.
+
+# Executive Management Report
+
+## Subject: Security and Business Continuity of the WMS Platform
+
+---
+
+# Background
+
+As part of the modernization of the logistics IT infrastructure, a new Warehouse Management System (WMS) platform has been implemented to centralize inventory management, goods movement tracking, and logistics operations.
+
+This platform relies on a secure, monitored, and resilient PostgreSQL infrastructure designed to protect business operations from incidents that could affect service continuity.
+
+The objective is to ensure data availability, service continuity, and protection of critical business information while simplifying the day-to-day management of the environment.
+
+---
+
+# Identified Risks
+
+Several risks that could impact business operations have been identified:
+
+* Primary server failure;
+* Data loss or corruption;
+* Accidental deletion of information;
+* Hardware failure;
+* Human error;
+* System resource saturation;
+* Backup unavailability;
+* Critical service interruption.
+
+These events may result in service disruption, productivity loss, or temporary unavailability of business data.
+
+---
+
+# Implemented Solutions
+
+Several mechanisms have been deployed to mitigate these risks.
+
+## High Availability
+
+Two PostgreSQL servers have been implemented:
+
+* a Primary server (WMS-DB-01);
+* a secondary failover server (WMS-DB-02).
+
+Data is automatically replicated between the two servers to ensure availability and enable rapid recovery in the event of an incident affecting the Primary server.
+
+This architecture significantly reduces the risk of prolonged service outages.
+
+---
+
+## Backup Strategy
+
+Automated backups are performed daily to ensure rapid data recovery in the event of an incident.
+
+To further strengthen data protection, backups are transferred to a dedicated server (WMS-BACKUP) independent of the Primary server.
+
+This architecture provides:
+
+* protection against simultaneous loss of production data and backups;
+* improved infrastructure resilience;
+* simplified restoration operations.
+
+Restoration tests have been successfully conducted to validate the reliability of the backup strategy.
+
+---
+
+## Monitoring
+
+A Zabbix monitoring platform continuously supervises:
+
+* server availability;
+* CPU utilization;
+* memory usage;
+* disk space consumption;
+* PostgreSQL replication status;
+* backup status;
+* overall infrastructure health.
+
+This enables rapid detection of anomalies before they impact business operations.
+
+---
+
+## Security
+
+A Role-Based Access Control (RBAC) model has been implemented.
+
+Each user is granted only the permissions required for their responsibilities, in accordance with the Principle of Least Privilege.
+
+The defined roles reduce the risks associated with accidental errors and unauthorized access.
+
+Additionally, the PostgreSQL administration platform (pgAdmin) is hosted on a dedicated server (WMS-PGADMIN), separating administrative activities from the production environment.
+
+This separation significantly enhances the overall security of the infrastructure.
+
+---
+
+# Selected Architecture
+
+The final infrastructure is based on five specialized servers:
+
+| Server      | Function                  |
+| ----------- | ------------------------- |
+| WMS-DB-01   | PostgreSQL Primary        |
+| WMS-DB-02   | PostgreSQL Replica        |
+| WMS-PGADMIN | PostgreSQL Administration |
+| WMS-BACKUP  | External Backup Storage   |
+| WMS-SUPER01 | Zabbix Monitoring         |
+
+This architecture provides clear separation of responsibilities and simplifies operational management.
+
+---
+
+# Business Benefits
+
+The implemented solution provides several key advantages:
+
+* improved system availability;
+* reduced risk of data loss;
+* enhanced security;
+* improved control over IT operations;
+* reduced service interruptions;
+* faster incident response;
+* stronger backup protection;
+* improved infrastructure resilience;
+* simplified administration;
+* enhanced business continuity.
+
+---
+
+# Future Enhancements
+
+The implemented infrastructure provides a solid foundation that can be extended in the future through:
+
+* advanced failover automation;
+* additional high-availability mechanisms;
+* advanced application monitoring;
+* centralized log management;
+* enhanced security monitoring.
+
+---
+
+# Conclusion
+
+The deployed infrastructure fully meets NordTransit Logistics' current requirements in terms of availability, security, monitoring, and business continuity.
+
+The architecture relies on several specialized servers dedicated respectively to production, replication, administration, backup, and monitoring activities.
+
+The combination of replication, externalized backups, centralized monitoring, and role-based access control ensures a high level of service while minimizing operational risks.
+
+This solution provides the company with a robust, scalable, and professional-grade infrastructure aligned with industry best practices and capable of supporting future growth and operational requirements.

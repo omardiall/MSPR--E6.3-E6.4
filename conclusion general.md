@@ -38,3 +38,44 @@ Au-delà des aspects techniques, cette MSPR nous a permis de développer des com
 L'ensemble des objectifs définis dans le cahier des charges a été atteint. L'infrastructure réalisée constitue une solution robuste, sécurisée, supervisée et évolutive, conforme aux bonnes pratiques professionnelles et capable de répondre aux besoins opérationnels de NordTransit Logistics.
 
 Cette expérience nous a permis de mettre en pratique les compétences attendues d'un Administrateur Systèmes, Réseaux et Bases de Données dans un contexte proche des environnements de production rencontrés en entreprise.
+
+# General Conclusion
+
+As part of this MSPR project, we designed, deployed, secured, and documented a complete database infrastructure that meets the availability, security, monitoring, and business continuity requirements defined in the NordTransit Logistics specifications.
+
+The implemented solution is based on PostgreSQL and relies on a distributed architecture composed of five specialized servers:
+
+* WMS-DB-01: Primary PostgreSQL server;
+* WMS-DB-02: Secondary PostgreSQL server providing replication;
+* WMS-PGADMIN: Dedicated PostgreSQL administration server;
+* WMS-BACKUP: Dedicated external backup storage server;
+* WMS-SUPER01: Zabbix monitoring server.
+
+This architecture separates critical infrastructure roles in order to improve security, service availability, and overall system resilience.
+
+To ensure business continuity, a PostgreSQL Primary/Replica replication architecture was implemented and validated through synchronization testing. This replication mechanism guarantees data availability and facilitates recovery operations in the event of an incident affecting the Primary server.
+
+Data protection is based on an automated backup strategy combined with external backup storage on the WMS-BACKUP server. Restoration procedures were successfully tested to verify the ability to recover data in the event of accidental deletion, corruption, or hardware failure.
+
+The entire infrastructure is monitored using Zabbix. The main monitored indicators include server availability, CPU utilization, memory usage, disk space consumption, PostgreSQL replication status, and backup monitoring. This monitoring solution enables rapid incident detection and contributes to improving service quality.
+
+From a security perspective, a Role-Based Access Control (RBAC) model was implemented in accordance with the Principle of Least Privilege. Several user profiles were defined to ensure that permissions are limited strictly to the operations required by each role.
+
+The project also resulted in the production of several professional deliverables, including:
+
+* Technical Architecture Documentation;
+* Conceptual Data Model (CDM) and Logical Data Model (LDM);
+* Monitoring Guide;
+* Administration and Operations Guide;
+* Operations RunBook;
+* Business Continuity Plan (BCP) and Disaster Recovery Plan (DRP);
+* Log Analysis Report;
+* Database Optimization Methodology;
+* Project Management and Risk Analysis Documentation;
+* Executive Management Report.
+
+Beyond the technical aspects, this MSPR project allowed us to develop valuable skills in PostgreSQL administration, high availability, backup and recovery strategies, infrastructure monitoring, access security, project management, and technical documentation.
+
+All objectives defined in the project specifications were successfully achieved. The resulting infrastructure provides a robust, secure, monitored, and scalable solution that complies with industry best practices and effectively meets the operational requirements of NordTransit Logistics.
+
+This experience enabled us to apply and strengthen the skills expected from a Systems, Networks, and Database Administrator in a professional environment closely aligned with real-world production infrastructures.

@@ -238,3 +238,246 @@ L'optimisation ne repose pas uniquement sur les requêtes SQL. Elle repose égal
 * WMS-SUPER01 pour la supervision.
 
 Cette approche permet d'améliorer les performances, la disponibilité et la sécurité globale de l'infrastructure WMS.
+
+# PostgreSQL Database Optimization Methodology
+
+## 1. Objective
+
+The objective of this phase was to improve the performance of the WMS database in order to ensure satisfactory response times for inventory management, stock monitoring, and logistics operations.
+
+The optimization process focused on:
+
+* database model design;
+* implementation of integrity constraints;
+* index utilization;
+* business usage analysis;
+* PostgreSQL execution plan analysis;
+* role separation across infrastructure servers.
+
+---
+
+# 2. Usage Analysis
+
+The main business operations identified are:
+
+* customer inventory consultation;
+* product search using SKU;
+* inventory movement history consultation;
+* product location lookup;
+* stock entry and exit tracking;
+* review of operations performed by users.
+
+These operations are frequently executed by the WMS application and therefore require efficient performance.
+
+To reduce the workload on the Primary PostgreSQL server, the infrastructure relies on several dedicated servers:
+
+* WMS-DB-01: Primary PostgreSQL operations;
+* WMS-DB-02: Replication and business continuity;
+* WMS-PGADMIN: PostgreSQL administration;
+* WMS-BACKUP: External backup storage;
+* WMS-SUPER01: Infrastructure monitoring.
+
+This separation prevents administration, backup, and monitoring activities from impacting the production server.
+
+---
+
+# 3. Implemented Constraints
+
+To improve data consistency and prevent business logic inconsistencies, several constraints were implemented.
+
+## Primary Keys
+
+* client_pkey
+* article_pkey
+* entrepot_pkey
+* localisation_pkey
+* stock_pkey
+* mouvement_stock_pkey
+* utilisateur_pkey
+
+## Foreign Keys
+
+* localisation → entrepot
+* stock → client
+* stock → article
+* stock → localisation
+* mouvement_stock → client
+* mouvement_stock → utilisateur
+* mouvement_stock → article
+* mouvement_stock → localisation
+
+## UNIQUE Constraints
+
+* client email
+* user email
+* warehouse code
+* product SKU
+
+## CHECK Constraints
+
+* positive quantity;
+* positive dimensions;
+* positive weight;
+* controlled movement type;
+* controlled user role.
+
+These constraints ensure data quality and help prevent data entry errors.
+
+---
+
+# 4. Index Optimization
+
+PostgreSQL automatically creates indexes on:
+
+* primary keys;
+* columns defined as UNIQUE.
+
+These indexes accelerate searches on the most frequently used columns.
+
+Examples:
+
+* customer lookup by email;
+* product lookup by SKU;
+* warehouse lookup by code;
+* fast access to records by identifier.
+
+Additional indexes can also be created on columns frequently used in filters and joins.
+
+Example:
+
+```sql
+CREATE INDEX idx_stock_client
+ON stock(id_client);
+```
+
+```sql
+CREATE INDEX idx_stock_article
+ON stock(id_article);
+```
+
+```sql
+CREATE INDEX idx_mouvement_article
+ON mouvement_stock(id_article);
+```
+
+```sql
+CREATE INDEX idx_mouvement_date
+ON mouvement_stock(date_mouvement);
+```
+
+These indexes improve the performance of the most common inventory and logistics queries.
+
+---
+
+# 5. Test Scenarios
+
+Several representative business queries were used.
+
+## Customer Lookup by Email
+
+```sql
+SELECT *
+FROM client
+WHERE email = 'replication@test.fr';
+```
+
+## Customer Inventory Consultation
+
+```sql
+SELECT *
+FROM stock
+WHERE id_client = 1;
+```
+
+## Product Movement Consultation
+
+```sql
+SELECT *
+FROM mouvement_stock
+WHERE id_article = 1;
+```
+
+## Recent Inventory Movements
+
+```sql
+SELECT *
+FROM mouvement_stock
+ORDER BY date_mouvement DESC;
+```
+
+These queries represent common operations within a WMS environment.
+
+---
+
+# 6. Execution Plan Analysis
+
+The PostgreSQL `EXPLAIN ANALYZE` tool was used to study database engine behavior.
+
+Example:
+
+```sql
+EXPLAIN ANALYZE
+SELECT *
+FROM client
+WHERE email = 'replication@test.fr';
+```
+
+The execution plan makes it possible to determine whether PostgreSQL is using an index or performing a full table scan.
+
+Another example:
+
+```sql
+EXPLAIN ANALYZE
+SELECT *
+FROM stock
+WHERE id_client = 1;
+```
+
+After creating an index on the `id_client` column, PostgreSQL can access the relevant records more efficiently.
+
+---
+
+# 7. Results Achieved
+
+The implemented optimizations provide:
+
+* faster customer searches;
+* faster product searches;
+* more efficient inventory consultations;
+* improved inventory movement retrieval;
+* better data consistency;
+* reduced risk of inconsistencies;
+* improved workload distribution across servers;
+* reduced administrative workload on the Primary PostgreSQL server;
+* improved overall infrastructure stability.
+
+---
+
+# 8. Applied Best Practices
+
+The following best practices were applied:
+
+* database normalization;
+* systematic use of primary keys;
+* use of foreign keys;
+* implementation of integrity constraints;
+* duplicate data prevention;
+* strategic indexing of critical columns;
+* separation of production, administration, backup, and monitoring functions;
+* continuous infrastructure monitoring.
+
+---
+
+# 9. Conclusion
+
+The PostgreSQL database was optimized through a combination of rigorous data modeling, integrity constraints, indexing mechanisms, and an appropriate infrastructure design.
+
+Optimization does not rely solely on SQL query performance. It also relies on a clear separation of responsibilities between the different servers:
+
+* WMS-DB-01 for PostgreSQL production workloads;
+* WMS-DB-02 for replication;
+* WMS-PGADMIN for administration;
+* WMS-BACKUP for externalized backups;
+* WMS-SUPER01 for monitoring.
+
+This approach improves performance, availability, and overall security of the WMS infrastructure while ensuring efficient and reliable database operations.

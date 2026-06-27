@@ -219,3 +219,226 @@ L'analyse régulière des journaux constitue un élément essentiel de l'exploit
 Elle permet d'anticiper les incidents, de faciliter les diagnostics et d'assurer la disponibilité des services.
 
 Les contrôles effectués durant le projet n'ont révélé aucune anomalie critique et confirment le bon fonctionnement global de l'infrastructure PostgreSQL, de la réplication, des sauvegardes et de la supervision.
+
+# WMS Infrastructure Log Analysis
+
+# 1. Purpose
+
+The purpose of this analysis is to verify the proper operation of the WMS infrastructure through the examination of system and application logs.
+
+Log analysis helps to:
+
+* detect incidents;
+* identify errors;
+* monitor access attempts;
+* verify PostgreSQL replication;
+* validate backup operations;
+* facilitate troubleshooting and incident diagnosis.
+
+---
+
+# 2. Log Sources Analyzed
+
+## PostgreSQL
+
+PostgreSQL logs are used to monitor:
+
+* user connections;
+* SQL errors;
+* replication issues;
+* administrative operations;
+* backup and restore errors.
+
+Command used:
+
+```bash
+docker logs postgres-primary
+```
+
+---
+
+## PostgreSQL Replica
+
+Replica logs are used to verify:
+
+* WAL log reception;
+* replication status;
+* potential synchronization issues.
+
+Command used:
+
+```bash
+docker logs postgres-replica
+```
+
+---
+
+## Docker
+
+Docker logs are used to monitor:
+
+* container startup events;
+* unexpected service shutdowns;
+* runtime errors.
+
+Command used:
+
+```bash
+docker logs <container_name>
+```
+
+---
+
+## Zabbix
+
+Zabbix logs are used to monitor:
+
+* metric collection;
+* alert generation;
+* agent status;
+* monitoring errors.
+
+Command used:
+
+```bash
+docker logs zabbix-server
+```
+
+---
+
+# 3. Analyzed Cases
+
+## Case #1: PostgreSQL Replication Verification
+
+Example log entry:
+
+```text
+LOG: started streaming WAL from primary
+```
+
+Interpretation:
+
+The Replica server is successfully receiving WAL logs from the Primary server.
+
+Conclusion:
+
+PostgreSQL replication is operating correctly.
+
+---
+
+## Case #2: User Connection
+
+Example log entry:
+
+```text
+connection authorized: user=wms_admin
+```
+
+Interpretation:
+
+The user has the required permissions and the connection has been successfully established.
+
+Conclusion:
+
+Access control is functioning correctly.
+
+---
+
+## Case #3: Successful Backup
+
+Example log entry:
+
+```text
+Backup completed successfully
+```
+
+Interpretation:
+
+The backup operation completed successfully without any errors.
+
+Conclusion:
+
+The backup strategy is operational.
+
+---
+
+## Case #4: Zabbix Monitoring
+
+Example log entry:
+
+```text
+Zabbix agent started
+```
+
+Interpretation:
+
+The monitoring agent is successfully communicating with the Zabbix server.
+
+Conclusion:
+
+The monitoring infrastructure is functioning properly.
+
+---
+
+# 4. Log Verification Procedure
+
+Logs should be reviewed regularly.
+
+Commands used:
+
+```bash
+docker logs postgres-primary --tail 50
+```
+
+```bash
+docker logs postgres-replica --tail 50
+```
+
+```bash
+docker logs zabbix-server --tail 50
+```
+
+Items to verify:
+
+* critical errors;
+* replication issues;
+* backup failures;
+* suspicious connections;
+* system errors;
+* recurring alerts.
+
+---
+
+# 5. Corrective Actions
+
+If an error is detected:
+
+1. Identify the affected component.
+2. Analyze the error message.
+3. Verify the service status.
+4. Review additional logs.
+5. Apply the necessary correction.
+6. Confirm service recovery.
+
+---
+
+# 6. Results Obtained
+
+The analyses performed during the project confirmed:
+
+* proper PostgreSQL operation;
+* successful replication;
+* successful backup execution;
+* proper monitoring operation;
+* availability of critical services.
+
+---
+
+# 7. Conclusion
+
+Regular log analysis is a key component of WMS infrastructure operations.
+
+It enables proactive incident detection, facilitates troubleshooting, and helps ensure service availability.
+
+The checks performed throughout the project did not reveal any critical issues and confirmed the proper operation of PostgreSQL, replication, backup processes, and the monitoring infrastructure.
+

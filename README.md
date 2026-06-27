@@ -259,3 +259,275 @@ L'architecture finale repose sur cinq serveurs spécialisés :
 Les mécanismes de haute disponibilité, de réplication, de sauvegarde externalisée, de supervision et de sécurisation des accès garantissent la continuité du service tout en assurant la protection des données critiques de l’entreprise.
 
 Cette MSPR nous a permis de mettre en pratique les compétences attendues d’un Administrateur Systèmes, Réseaux et Bases de Données dans un contexte professionnel réaliste proche d’un environnement de production.
+
+
+# MSPR TPRE623 – Design, Operation and Protection of a Relational Database Management System
+
+## Project Overview
+
+As part of the MSPR TPRE623 project within the Systems, Networks and Database Administration (ASRBD) curriculum, our team was tasked by the fictional company **NordTransit Logistics (NTL)** with designing, securing, monitoring, and operating a new database infrastructure for its Warehouse Management System (WMS).
+
+The primary objective of the project was to implement a modern infrastructure meeting the following requirements:
+
+* High Availability;
+* Business Continuity;
+* Access Security;
+* Backup and Recovery;
+* Monitoring;
+* Operational Management;
+* Technical Documentation.
+
+To meet these requirements, we selected **PostgreSQL** as the Relational Database Management System (RDBMS) and implemented an architecture based on:
+
+* A Primary PostgreSQL Server;
+* A Replica PostgreSQL Server;
+* A Dedicated PostgreSQL Administration Server;
+* A Dedicated External Backup Server;
+* A Centralized Monitoring Platform;
+* Role-Based Access Control (RBAC);
+* A Business Continuity Plan (BCP);
+* A Disaster Recovery Plan (DRP).
+
+---
+
+# Implemented Architecture
+
+The infrastructure consists of the following components:
+
+* WMS-DB-01 : PostgreSQL Primary
+* WMS-DB-02 : PostgreSQL Replica
+* WMS-PGADMIN : PostgreSQL Administration
+* WMS-BACKUP : External Backup Storage
+* WMS-SUPER01 : Zabbix Monitoring
+
+This architecture relies on role separation to improve platform security, availability, and resilience.
+
+## Simplified Architecture Diagram
+
+```text
+WMS-SUPER01 (Zabbix)
+        │
+        ├───────────────┐
+        │               │
+        ▼               ▼
+
+WMS-DB-01 ─────► WMS-DB-02
+ (Primary)        (Replica)
+
+      │
+      │ Backups
+      ▼
+
+ WMS-BACKUP
+
+ WMS-PGADMIN
+(PostgreSQL Administration)
+```
+
+---
+
+# Technologies Used
+
+## Database
+
+* PostgreSQL
+
+## Containerization
+
+* Docker
+* Docker Compose
+
+## Administration
+
+* pgAdmin
+
+## Monitoring
+
+* Zabbix
+* Zabbix Agent
+
+## Backup
+
+* pg_dump
+* Cron
+
+---
+
+# Implemented Features
+
+## Database
+
+* Conceptual Data Model (CDM)
+* Logical Data Model (LDM)
+* Relational Schema Design
+* Referential Integrity
+* Business Constraints
+* Query Optimization
+* Advanced User Role Management
+
+---
+
+## High Availability
+
+* Primary / Replica Architecture
+* PostgreSQL Replication
+* Synchronization Validation
+* Replica Failover Procedure
+
+---
+
+## Backup and Recovery
+
+* Automated Backups
+* Backup Rotation
+* Backup Logging
+* Externalized Backups on WMS-BACKUP
+* Validated Restoration Procedures
+
+---
+
+## Security
+
+* RBAC (Role-Based Access Control)
+* Principle of Least Privilege
+* Dedicated Administration Accounts
+* Dedicated Replication Accounts
+* Dedicated Backup Accounts
+* Separation Between Production and Administration
+
+---
+
+## Monitoring
+
+* Zabbix Dashboard
+* Server Availability Monitoring
+* CPU Monitoring
+* Memory Monitoring
+* Disk Space Monitoring
+* Replication Status Monitoring
+* Backup Monitoring
+* Continuous Alerting and Monitoring
+
+---
+
+# Work Distribution
+
+## Omar Bachir Diallo
+
+### Project Manager and Database Administrator
+
+Responsibilities:
+
+* Project Management
+* Team Coordination
+* PostgreSQL Primary Deployment
+* PostgreSQL Replication Implementation
+* Backup Configuration
+* WMS-BACKUP Deployment
+* Restoration Testing
+* Technical Documentation
+* Infrastructure Validation
+
+---
+
+## Filda
+
+### Database Design and Modeling
+
+Responsibilities:
+
+* Business Requirements Analysis
+* Conceptual Data Model (CDM) Design
+* Logical Data Model (LDM) Design
+* Relational Schema Design
+* Business Constraint Definition
+* Data Integrity Validation
+* Contribution to Technical Documentation
+
+---
+
+## Amine
+
+### Monitoring and Operations
+
+Responsibilities:
+
+* WMS-SUPER01 Deployment
+* Zabbix Installation
+* Agent Configuration
+* Dashboard Creation
+* Alert Configuration
+* CPU, Memory and Storage Monitoring
+* Backup Monitoring
+* Log Analysis
+* Monitoring KPI Validation
+
+---
+
+## Madgyd
+
+### Security and Business Continuity
+
+Responsibilities:
+
+* RBAC Implementation
+* PostgreSQL Role Management
+* Permission Management
+* WMS-PGADMIN Deployment
+* Contribution to BCP/DRP
+* Risk Analysis
+* Operations Procedure Documentation
+* Participation in Project Management Deliverables
+
+---
+
+# Project Deliverables
+
+The following deliverables were produced during the project:
+
+* Technical Architecture Documentation
+* CDM and LDM
+* PostgreSQL Optimization Methodology
+* Monitoring Guide
+* Administration and Operations Guide
+* Operations RunBook
+* Log Analysis Report
+* BCP / DRP Documentation
+* Project Management and Risk Analysis
+* Executive Management Report
+* Technical Documentation
+
+---
+
+# Skills Developed
+
+This project enabled us to develop and apply skills in:
+
+* PostgreSQL Administration
+* High Availability
+* Database Replication
+* Backup and Recovery
+* Infrastructure Monitoring
+* Access Security
+* Log Analysis
+* Project Management
+* Technical Documentation
+* Business Continuity
+
+---
+
+# Conclusion
+
+This project enabled the design and deployment of a robust, secure, monitored, and resilient database infrastructure that meets the requirements of NordTransit Logistics.
+
+The final architecture is based on five specialized servers:
+
+* WMS-DB-01 : PostgreSQL Production
+* WMS-DB-02 : Replication and Business Continuity
+* WMS-PGADMIN : PostgreSQL Administration
+* WMS-BACKUP : External Backup Storage
+* WMS-SUPER01 : Zabbix Monitoring
+
+The combination of high availability mechanisms, replication, externalized backups, monitoring, and access control ensures service continuity while protecting the company’s critical data.
+
+This MSPR project provided practical experience in the skills expected from a Systems, Networks and Database Administrator within a professional environment closely aligned with real-world production infrastructures.

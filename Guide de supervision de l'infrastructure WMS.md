@@ -370,3 +370,376 @@ La solution Zabbix mise en œuvre répond aux exigences de supervision de l'infr
 Grâce à la surveillance centralisée de l'ensemble des serveurs, de la réplication PostgreSQL, des sauvegardes externalisées et des ressources système, l'équipe d'exploitation dispose d'une visibilité complète sur l'état de la plateforme.
 
 Cette supervision contribue directement à la disponibilité, à la sécurité et à la continuité d'activité du système WMS.
+
+# WMS Infrastructure Monitoring Guide
+
+# 1. Purpose
+
+The monitoring of the WMS infrastructure is provided by the Zabbix solution.
+
+The objectives are to:
+
+* monitor server health and availability;
+* detect incidents;
+* track infrastructure performance;
+* anticipate failures;
+* ensure service availability;
+* monitor PostgreSQL replication;
+* monitor backup operations;
+* facilitate daily operations.
+
+---
+
+# 2. Monitoring Architecture
+
+The monitoring server is:
+
+| Server      | IP Address      | Function      |
+| ----------- | --------------- | ------------- |
+| WMS-SUPER01 | 192.168.233.132 | Zabbix Server |
+
+The monitored servers are:
+
+| Server      | Function                  |
+| ----------- | ------------------------- |
+| WMS-DB-01   | PostgreSQL Primary        |
+| WMS-DB-02   | PostgreSQL Replica        |
+| WMS-PGADMIN | PostgreSQL Administration |
+| WMS-BACKUP  | External Backup Storage   |
+| WMS-SUPER01 | Zabbix Monitoring         |
+
+Each server runs a Zabbix Agent responsible for sending monitoring information to the Zabbix Server.
+
+The monitoring solution covers all critical infrastructure components to ensure service availability and rapid incident detection.
+
+---
+
+# 3. Monitored Indicators
+
+## Availability
+
+### Objective
+
+Verify that servers are reachable and operational.
+
+### Monitored Servers
+
+* WMS-DB-01
+* WMS-DB-02
+* WMS-PGADMIN
+* WMS-BACKUP
+* WMS-SUPER01
+
+### Alert Threshold
+
+```text
+Server unavailable
+```
+
+### Actions
+
+* Verify network connectivity.
+* Verify server status.
+* Verify Docker services.
+* Review system logs.
+
+---
+
+## CPU Utilization
+
+### Objective
+
+Measure processor workload.
+
+### Thresholds
+
+| Level    | Value      |
+| -------- | ---------- |
+| Normal   | < 70%      |
+| Warning  | 70% to 85% |
+| Critical | > 85%      |
+
+### Actions
+
+* Identify the responsible process.
+* Review PostgreSQL queries.
+* Check Docker containers.
+* Verify system services.
+
+---
+
+## Memory Utilization
+
+### Objective
+
+Measure RAM consumption.
+
+### Thresholds
+
+| Level    | Value      |
+| -------- | ---------- |
+| Normal   | < 75%      |
+| Warning  | 75% to 90% |
+| Critical | > 90%      |
+
+### Actions
+
+* Identify memory-consuming processes.
+* Verify PostgreSQL status.
+* Check Docker containers.
+* Review connected applications.
+
+---
+
+## Disk Utilization
+
+### Objective
+
+Prevent storage saturation.
+
+Special attention is given to the WMS-BACKUP server, which stores externalized backups.
+
+### Thresholds
+
+| Level    | Value      |
+| -------- | ---------- |
+| Normal   | < 80%      |
+| Warning  | 80% to 90% |
+| Critical | > 90%      |
+
+### Actions
+
+* Remove unnecessary files.
+* Verify backup status.
+* Archive old logs.
+* Check available space on WMS-BACKUP.
+
+---
+
+## PostgreSQL Replication Status
+
+### Objective
+
+Verify continuous synchronization between WMS-DB-01 and WMS-DB-02.
+
+### Monitored Indicator
+
+```text
+state = streaming
+```
+
+### Alert Threshold
+
+```text
+state != streaming
+```
+
+### Actions
+
+* Verify Replica server status.
+* Check network connectivity.
+* Review PostgreSQL logs.
+* Verify replication configuration.
+
+---
+
+## Backup Status
+
+### Objective
+
+Verify that backups are successfully generated and transferred to WMS-BACKUP.
+
+### Alert Threshold
+
+```text
+Missing daily backup
+```
+
+### Actions
+
+* Verify backup scripts.
+* Verify Cron jobs.
+* Verify transfer to WMS-BACKUP.
+* Check available disk space.
+
+---
+
+## pgAdmin Availability
+
+### Objective
+
+Verify accessibility of the PostgreSQL administration platform.
+
+### Monitored Server
+
+```text
+WMS-PGADMIN
+```
+
+### Alert Threshold
+
+```text
+pgAdmin service unavailable
+```
+
+### Actions
+
+* Verify Docker status.
+* Verify the pgAdmin container.
+* Verify connectivity with WMS-DB-01.
+* Review application logs.
+
+---
+
+# 4. Dashboard
+
+The Zabbix dashboard centralizes:
+
+* server availability;
+* CPU utilization;
+* memory utilization;
+* disk utilization;
+* PostgreSQL replication status;
+* backup status;
+* pgAdmin availability;
+* system alerts.
+
+The dashboard serves as the primary monitoring interface for the infrastructure.
+
+---
+
+# 5. Daily Monitoring Procedure
+
+Every day:
+
+1. Review the Zabbix dashboard.
+2. Check active alerts.
+3. Verify disk usage.
+4. Verify PostgreSQL replication status.
+5. Verify backups stored on WMS-BACKUP.
+6. Verify accessibility of WMS-PGADMIN.
+7. Review CPU and memory indicators.
+
+---
+
+# 6. Weekly Monitoring Procedure
+
+Every week:
+
+1. Review PostgreSQL performance.
+2. Review system logs.
+3. Review backup logs.
+4. Verify users and permissions.
+5. Verify Docker container status.
+6. Verify proper operation of WMS-PGADMIN.
+7. Review storage capacity on WMS-BACKUP.
+8. Review Zabbix alert history.
+
+---
+
+# 7. Alert Management
+
+## CPU Alert
+
+### Actions
+
+* Identify the responsible process.
+* Review PostgreSQL queries.
+* Check Docker activity.
+* Verify system resources.
+
+---
+
+## Memory Alert
+
+### Actions
+
+* Verify PostgreSQL status.
+* Review containers.
+* Check connected applications.
+* Investigate abnormal memory consumption.
+
+---
+
+## Disk Alert
+
+### Actions
+
+* Identify large files.
+* Verify backup operations.
+* Review logs.
+* Check available space on WMS-BACKUP.
+
+---
+
+## Replication Alert
+
+### Actions
+
+1. Verify Replica server status.
+2. Verify network connectivity.
+3. Check PostgreSQL services.
+4. Review PostgreSQL logs.
+5. Verify the `pg_stat_replication` view.
+
+---
+
+## Backup Alert
+
+### Actions
+
+1. Verify Cron jobs.
+2. Verify backup scripts.
+3. Verify storage availability on WMS-BACKUP.
+4. Review backup logs.
+
+---
+
+## Server Availability Alert
+
+### Actions
+
+1. Verify network connectivity.
+2. Verify Docker services.
+3. Verify PostgreSQL or the affected service.
+4. Review system logs.
+5. Check hardware resources.
+
+---
+
+# 8. Validation
+
+The tests performed during the project validated:
+
+* metric collection;
+* agent availability;
+* dashboard functionality;
+* monitoring of critical resources;
+* PostgreSQL replication monitoring;
+* externalized backup monitoring;
+* monitoring of the WMS-PGADMIN server;
+* monitoring of the WMS-BACKUP server;
+* detection of critical alerts.
+
+---
+
+# 9. Benefits of Monitoring
+
+The implemented monitoring solution provides:
+
+* rapid incident detection;
+* improved service availability;
+* continuous performance monitoring;
+* proactive capacity planning;
+* increased operational responsiveness;
+* reduced risk of service interruptions.
+
+---
+
+# 10. Conclusion
+
+The implemented Zabbix solution fully meets the monitoring requirements of the WMS infrastructure.
+
+Through centralized monitoring of all servers, PostgreSQL replication, externalized backups, and system resources, the operations team benefits from complete visibility into the health and status of the platform.
+
+This monitoring infrastructure directly contributes to the availability, security, and business continuity of the WMS system.
